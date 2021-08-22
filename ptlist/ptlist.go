@@ -72,11 +72,17 @@ func interval(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	location := queries.Get("tz")
-	if location == "" {
+	loc := queries.Get("tz")
+	if loc == "" {
 		// "" is also an accepted Location value, but I believe local
 		// time is more convenient than UTC.
-		location = "Local"
+		loc = "Local"
+	}
+
+	location, err := time.LoadLocation(loc)
+	if err != nil {
+		errorBadRequest(w, "Bad location provided.")
+		return
 	}
 
 	t1q := queries.Get("t1")
@@ -115,6 +121,6 @@ func interval(w http.ResponseWriter, r *http.Request) {
 
 		validResponse(w, time_utils.CalculateTimeIntervals(every, t1, t2))
 	} else {
-		validResponse(w, time_utils.CalculateDateIntervals(period, t1, t2))
+		validResponse(w, time_utils.CalculateDateIntervals(period, t1, t2, location))
 	}
 }

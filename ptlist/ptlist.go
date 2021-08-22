@@ -68,7 +68,7 @@ func interval(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if period != "1h" && period != "1d" && period != "1mo" && period != "1y" {
-		errorBadRequest(w, "Invalid period")
+		errorBadRequest(w, "Unsupported period")
 		return
 	}
 

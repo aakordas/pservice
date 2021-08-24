@@ -67,7 +67,18 @@ func interval(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if period != "1h" && period != "1d" && period != "1mo" && period != "1y" {
+	every, err := time.ParseDuration(period)
+
+	// I will not try to manufacture a regexp for the clock time, that
+	// covers the entire time.ParseDuration specification. If it is a wrong
+	// time, it will show up and throw an error when it will get parsed.
+	// I will also not try to make something as sleek for the calendar
+	// periods. I am a bit lazy, short on time and it would be an overkill
+	// :)
+	validDatePeriod := time_utils.DayRegexp.MatchString(period) ||
+		time_utils.MonthRegexp.MatchString(period) ||
+		time_utils.YearRegexp.MatchString(period)
+	if !validDatePeriod && err != nil {
 		errorBadRequest(w, "Unsupported period")
 		return
 	}
@@ -114,13 +125,16 @@ func interval(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if period == "1h" {
-		// I have already checked earlier that period has one of the
-		// valid values, so ParseDuration shouldn't return an error.
-		every, _ := time.ParseDuration(period)
-
-		validResponse(w, time_utils.CalculateTimeIntervals(every, t1, t2))
+	var intervals time_utils.Interval
+	if validDatePeriod {
+		intervals, err = time_utils.CalculateDateIntervals(period, t1, t2, location)
+		if err != nil {
+			errorBadRequest(w, "Invalid period")
+			return
+		}
 	} else {
-		validResponse(w, time_utils.CalculateDateIntervals(period, t1, t2, location))
+		intervals = time_utils.CalculateTimeIntervals(every, t1, t2)
 	}
+
+	validResponse(w, intervals)
 }

@@ -48,7 +48,7 @@ func CalculateTimeIntervals(period time.Duration, t1, t2 time.Time) (result Inte
 	return result
 }
 
-//addDayWithInterval adds interval days to t.
+//addDayWithInterval returns a function that adds interval hours to t.
 func addDayWithInterval(t time.Time, interval int) func(time.Time) time.Time {
 	return func(t time.Time) time.Time {
 		return addDay(t, interval)
@@ -60,7 +60,7 @@ func addDay(t time.Time, interval int) time.Time {
 	return t.AddDate(0, 0, interval)
 }
 
-// addMonthWithLocation returns a function that add interval months to t.
+// addMonthWithLocation returns a function that adds interval months to t.
 func addMonthWithLocation(t time.Time, interval int, location *time.Location) func(time.Time) time.Time {
 	loc := location
 	return func(t time.Time) time.Time {
@@ -79,14 +79,14 @@ func addMonth(t time.Time, interval int, location *time.Location) time.Time {
 	return firstDay.AddDate(0, interval, -1)
 }
 
-// addYearWithInterval adds interval years to t.
+// addYearWithInterval returns a function that adds interval years to t.
 func addYearWithInterval(t time.Time, interval int) func(time.Time) time.Time {
 	return func(t time.Time) time.Time {
 		return addYear(t, interval)
 	}
 }
 
-// addYear returns t+1y
+// addYear returns t+1y.
 func addYear(t time.Time, interval int) time.Time {
 	return t.AddDate(interval, 0, 0)
 }

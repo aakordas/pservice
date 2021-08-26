@@ -12,7 +12,7 @@ type Interval []string
 // timeFormat is desired time format. It is of the form "yyyymmddThhmmssZ"
 const timeFormat string = `20060102T150405Z`
 
-var numbers string = `[1-9][[:digit:]]+`
+var numbers string = `[1-9][[:digit:]]*`
 
 // HourRegexp is the regular expression that matches a period of hours.
 var HourRegexp *regexp.Regexp = regexp.MustCompile(numbers + `h`)

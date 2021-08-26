@@ -67,8 +67,6 @@ func interval(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	every, err := time.ParseDuration(period)
-
 	// I will not try to manufacture a regexp for the clock time, that
 	// covers the entire time.ParseDuration specification. If it is a wrong
 	// time, it will show up and throw an error when it will get parsed.
@@ -78,7 +76,10 @@ func interval(w http.ResponseWriter, r *http.Request) {
 	validDatePeriod := time_utils.DayRegexp.MatchString(period) ||
 		time_utils.MonthRegexp.MatchString(period) ||
 		time_utils.YearRegexp.MatchString(period)
-	if !validDatePeriod && err != nil {
+	// Accepting only hours because time.Round() and time.Truncate() are
+	// weird.
+	validTimePeriod := time_utils.HourRegexp.MatchString(period)
+	if !validDatePeriod && !validTimePeriod {
 		errorBadRequest(w, "Unsupported period")
 		return
 	}
@@ -132,7 +133,8 @@ func interval(w http.ResponseWriter, r *http.Request) {
 			errorBadRequest(w, "Invalid period")
 			return
 		}
-	} else {
+	} else if validTimePeriod {
+		every, _ := time.ParseDuration(period) // There should be no errors...
 		intervals = time_utils.CalculateTimeIntervals(every, t1, t2)
 	}
 

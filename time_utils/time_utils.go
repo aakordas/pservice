@@ -12,6 +12,9 @@ type Interval []string
 // timeFormat is desired time format. It is of the form "yyyymmddThhmmssZ"
 const timeFormat string = `20060102T150405Z`
 
+// HourRegexp is the regular expression that matches a period of hours.
+var HourRegexp *regexp.Regexp = regexp.MustCompile(`[[:digit:]]+h`)
+
 // DayRegexp is the regular expression that matches a period of days.
 var DayRegexp *regexp.Regexp = regexp.MustCompile(`[[:digit:]]+d`)
 
@@ -35,11 +38,11 @@ func PrintTime(t time.Time) string {
 }
 
 // CalculateTimeIntervals returns the Interval elapsed between t1 and t2 in
-// period intervals. period should be a duration string valid for
-// time.ParseDuration.
+// period intervals. period should be a duration string of the form "nh", where
+// n is the number of hours.
 func CalculateTimeIntervals(period time.Duration, t1, t2 time.Time) (result Interval) {
-	start := t1.Round(period)
-	end := t2.Round(period)
+	start := t1.Round(time.Hour)
+	end := t2.Round(time.Hour)
 
 	for t := start; t.Before(end); t = t.Add(period) {
 		result = append(result, PrintTime(t))

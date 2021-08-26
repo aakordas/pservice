@@ -12,17 +12,19 @@ type Interval []string
 // timeFormat is desired time format. It is of the form "yyyymmddThhmmssZ"
 const timeFormat string = `20060102T150405Z`
 
+var numbers string = `[1-9][[:digit:]]+`
+
 // HourRegexp is the regular expression that matches a period of hours.
-var HourRegexp *regexp.Regexp = regexp.MustCompile(`[[:digit:]]+h`)
+var HourRegexp *regexp.Regexp = regexp.MustCompile(numbers + `h`)
 
 // DayRegexp is the regular expression that matches a period of days.
-var DayRegexp *regexp.Regexp = regexp.MustCompile(`[[:digit:]]+d`)
+var DayRegexp *regexp.Regexp = regexp.MustCompile(numbers + `d`)
 
 // MonthRegexp is the regular expression that matches a period of months.
-var MonthRegexp *regexp.Regexp = regexp.MustCompile(`[[:digit:]]+mo`)
+var MonthRegexp *regexp.Regexp = regexp.MustCompile(numbers + `mo`)
 
 // YearRegexp is the regular expression that matches a period of years.
-var YearRegexp *regexp.Regexp = regexp.MustCompile(`[[:digit:]]+y`)
+var YearRegexp *regexp.Regexp = regexp.MustCompile(numbers + `y`)
 
 // NewTime returns a new Time in the specified location and with the specified
 // clock.

@@ -15,7 +15,7 @@ func (i1 *Interval) Equal(i2 *Interval) bool {
 	s1 := []string(*i1)
 	s2 := []string(*i2)
 
-	if (len(s1) != len(s2)) {
+	if len(s1) != len(s2) {
 		return false
 	}
 

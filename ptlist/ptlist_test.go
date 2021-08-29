@@ -2,7 +2,7 @@
 
 package ptlist
 
-import(
+import (
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -19,17 +19,17 @@ func buildQuery(period, timezone, t1, t2 string) string {
 	periodQuery := "period="
 	if period != "" {
 		periodQuery += period
-		query += periodQuery+"&"
+		query += periodQuery + "&"
 	}
 
 	timezoneQuery := "tz="
 	timezoneQuery += timezone
-	query += timezoneQuery+"&"
+	query += timezoneQuery + "&"
 
 	t1Query := "t1="
 	if t1 != "" {
 		t1Query += t1
-		query += t1Query+"&"
+		query += t1Query + "&"
 	}
 
 	t2Query := "t2="
@@ -43,110 +43,110 @@ func buildQuery(period, timezone, t1, t2 string) string {
 
 func TestResponses(t *testing.T) {
 	type testCase struct {
-		Name string	// The name of the test
+		Name       string // The name of the test
 		HTTPMethod string // Just GET for now
-		Query string
+		Query      string
 	}
 
 	type test struct {
-		Got testCase
-		Want int	// Just the HTTP return code
+		Got  testCase
+		Want int // Just the HTTP return code
 	}
 
 	got := []test{
-		test{
+		{
 			Got: testCase{
-				Name: "1 hour no timezone",
+				Name:       "1 hour no timezone",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("1h", "", "20200101T010000Z", "20200101T050000Z"),
+				Query:      buildQuery("1h", "", "20200101T010000Z", "20200101T050000Z"),
 			},
 			Want: http.StatusOK,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "1 day no timezone",
+				Name:       "1 day no timezone",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("1d", "", "20200101T010000Z", "20200105T010000Z"),
+				Query:      buildQuery("1d", "", "20200101T010000Z", "20200105T010000Z"),
 			},
 			Want: http.StatusOK,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "3 hours Athens timezone",
+				Name:       "3 hours Athens timezone",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("3h", "Europe/Athens", "20200101T010000Z", "20200101T050000Z"),
+				Query:      buildQuery("3h", "Europe/Athens", "20200101T010000Z", "20200101T050000Z"),
 			},
 			Want: http.StatusOK,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "1 month Athens timezone",
+				Name:       "1 month Athens timezone",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("1mo", "Europe/Athens", "20200101T010000Z", "20200501T010000Z"),
+				Query:      buildQuery("1mo", "Europe/Athens", "20200101T010000Z", "20200501T010000Z"),
 			},
 			Want: http.StatusOK,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "1 hour Los Angeles timezone",
+				Name:       "1 hour Los Angeles timezone",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("1h", "America/Los_Angeles", "20200101T010000Z", "20200101T050000Z"),
+				Query:      buildQuery("1h", "America/Los_Angeles", "20200101T010000Z", "20200101T050000Z"),
 			},
 			Want: http.StatusOK,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "1 year Los Angeles timezone",
+				Name:       "1 year Los Angeles timezone",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("1y", "America/Los_Angeles", "20200101T010000Z", "20250101T010000Z"),
+				Query:      buildQuery("1y", "America/Los_Angeles", "20200101T010000Z", "20250101T010000Z"),
 			},
 			Want: http.StatusOK,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "3 hours invalid timezone",
+				Name:       "3 hours invalid timezone",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("3h", "Africa/Wakanda", "20200101T010000Z", "20200101T050000Z"),
+				Query:      buildQuery("3h", "Africa/Wakanda", "20200101T010000Z", "20200101T050000Z"),
 			},
 			Want: http.StatusBadRequest,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "Missing period",
+				Name:       "Missing period",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("", "", "20200101T010000Z", "20200101T010000Z"),
+				Query:      buildQuery("", "", "20200101T010000Z", "20200101T010000Z"),
 			},
 			Want: http.StatusBadRequest,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "Missing t1",
+				Name:       "Missing t1",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("1h", "", "", "20200101T010000Z"),
+				Query:      buildQuery("1h", "", "", "20200101T010000Z"),
 			},
 			Want: http.StatusBadRequest,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "Missing t2",
+				Name:       "Missing t2",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("1h", "", "20200101T010000Z", ""),
+				Query:      buildQuery("1h", "", "20200101T010000Z", ""),
 			},
 			Want: http.StatusBadRequest,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "Bad t1",
+				Name:       "Bad t1",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("1h", "", "20200101T010000ZQ", "20200101T010000Z"),
+				Query:      buildQuery("1h", "", "20200101T010000ZQ", "20200101T010000Z"),
 			},
 			Want: http.StatusBadRequest,
 		},
-		test{
+		{
 			Got: testCase{
-				Name: "Bad t2",
+				Name:       "Bad t2",
 				HTTPMethod: http.MethodGet,
-				Query: buildQuery("1h", "", "20200101T010000Z", "20200101T010000ZQ"),
+				Query:      buildQuery("1h", "", "20200101T010000Z", "20200101T010000ZQ"),
 			},
 			Want: http.StatusBadRequest,
 		},

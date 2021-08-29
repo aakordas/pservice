@@ -46,8 +46,19 @@ func CalculateTimeIntervals(period time.Duration, t1, t2 time.Time) (result Inte
 	start := t1.Round(time.Hour)
 	end := t2.Round(time.Hour)
 
-	for t := start; t.Before(end); t = t.Add(period) {
+	t := start
+	for t.Before(end) {
 		result = append(result, PrintTime(t))
+
+		t = t.Add(period)
+		if t.Equal(end) {
+			result = append(result, PrintTime(end))
+			break
+		}
+	}
+
+	if result == nil {
+		return Interval{}
 	}
 
 	return result

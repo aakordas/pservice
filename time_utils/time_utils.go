@@ -9,6 +9,25 @@ import (
 // Interval is the successful request response type.
 type Interval []string
 
+// Equal compares two Interval objects. It compares the elements on each index.
+func (i1 *Interval) Equal(i2 *Interval) bool {
+	// Not sure this is the best way to do this...
+	s1 := []string(*i1)
+	s2 := []string(*i2)
+
+	if (len(s1) != len(s2)) {
+		return false
+	}
+
+	for i := range s1 {
+		if s1[i] != s2[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
 // timeFormat is desired time format. It is of the form "yyyymmddThhmmssZ"
 const timeFormat string = `20060102T150405Z`
 

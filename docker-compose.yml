@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  pservice:
+    build:
+      context: .
+    container_name: pservice
+    hostname: pservice
+    ports:
+      - 8282:8282
+    deploy:
+      restart_policy:
+        condition: on-failure

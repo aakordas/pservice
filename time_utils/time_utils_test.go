@@ -108,7 +108,7 @@ func TestCalculateDateIntervals(t *testing.T) {
 		test{
 			Got: testCase{
 				Name: "1 day",
-				Period: durations[0],
+				Period: "1d",
 				T1: time.Date(2020, 1, 1, 1, 2, 3, 0, location),
 				T2: time.Date(2020, 1, 5, 1, 2, 3, 0, location),
 			},
@@ -118,7 +118,7 @@ func TestCalculateDateIntervals(t *testing.T) {
 		test{
 			Got: testCase{
 				Name: "1 month",
-				Period: durations[1],
+				Period: "1mo",
 				T1: time.Date(2020, 1, 2, 3, 4, 5, 0, location),
 				T2: time.Date(2020, 5, 2, 3, 4, 5, 0, location),
 			},
@@ -128,7 +128,7 @@ func TestCalculateDateIntervals(t *testing.T) {
 		test{
 			Got: testCase{
 				Name: "1 year",
-				Period: durations[2],
+				Period: "1y",
 				T1: time.Date(2020, 1, 2, 3, 4, 5, 0, location),
 				T2: time.Date(2025, 1, 2, 3, 4, 5, 0, location),
 			},
@@ -139,7 +139,7 @@ func TestCalculateDateIntervals(t *testing.T) {
 		test{
 			Got: testCase{
 				Name: "3 days",
-				Period: durations[3],
+				Period: "3d",
 				T1: time.Date(2020, 1, 1, 2, 3, 4, 0, location),
 				T2: time.Date(2020, 1, 5, 2, 3, 4, 0, location),
 			},
@@ -148,7 +148,7 @@ func TestCalculateDateIntervals(t *testing.T) {
 		test{
 			Got: testCase{
 				Name: "3 months",
-				Period: durations[4],
+				Period: "3mo",
 				T1: time.Date(2020, 1, 2, 3, 4, 5, 0, location),
 				T2: time.Date(2020, 5, 2, 3, 4, 5, 0, location),
 			},
@@ -157,7 +157,7 @@ func TestCalculateDateIntervals(t *testing.T) {
 		test{
 			Got: testCase{
 				Name: "3 years",
-				Period: durations[5],
+				Period: "3y",
 				T1: time.Date(2020, 1, 2, 3, 4, 5, 0, location),
 				T2: time.Date(2025, 1, 2, 3, 4, 5, 0, location),
 			},
@@ -166,7 +166,7 @@ func TestCalculateDateIntervals(t *testing.T) {
 		test{
 			Got: testCase{
 				Name: "More years than t1-t2",
-				Period: durations[6],
+				Period: "30y",
 				T1: time.Date(2020, 1, 2, 3, 4, 5, 0, location),
 				T2: time.Date(2021, 1, 2, 3, 4, 5, 0, location),
 			},
@@ -175,7 +175,7 @@ func TestCalculateDateIntervals(t *testing.T) {
 		test{
 			Got: testCase{
 				Name: "t1=t2",
-				Period: durations[0],
+				Period: "1d",
 				T1: time.Date(2020, 1, 2, 3, 4, 5, 0, location),
 				T2: time.Date(2020, 1, 2, 3, 4, 5, 0, location),
 			},

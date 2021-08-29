@@ -9,14 +9,14 @@ import (
 	"github.com/aakordas/pservice/time_utils"
 )
 
+func init() {
+	http.HandleFunc("/ptlist", interval)
+}
+
 // Invalid is the unsuccessful request response type.
 type Invalid struct {
 	Status      string `json:"status"`
 	Description string `json:"desc"`
-}
-
-func init() {
-	http.HandleFunc("/ptlist", interval)
 }
 
 func validResponse(w http.ResponseWriter, result time_utils.Interval) {
